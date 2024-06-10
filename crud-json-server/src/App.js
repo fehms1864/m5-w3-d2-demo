@@ -10,13 +10,14 @@ class App extends React.Component {
         alldata: [],
         singledata: {
           title: "",
-          author: ""
+          author: "",
+          id: null
         }
       };
     }
 
-    getLists = () => {
-      fetch("http://localhost:5001/posts")
+    getLists = async () => {
+      await fetch('http://localhost:8080/api/books')
       .then(res => res.json())
       .then(result =>
         this.setState({
@@ -36,15 +37,17 @@ class App extends React.Component {
       this.setState({
         singledata: {
           title: title,
-          author: author
+          author: author,
+          id: this.state.alldata.length + 1
         }
       });
     }
 
-    createList = () => {
-      fetch("http://localhost:5001/posts", {
-        method: "POST",
+    createList = async () => {
+      await fetch("http://localhost:8080/api/book", {
+        method: 'POST',
         headers: {
+          'Accept': 'application/json',
           "Content-Type": "application/json"
         },
         body: JSON.stringify(this.state.singledata)
@@ -52,9 +55,11 @@ class App extends React.Component {
         this.setState({
           singledata: {
             title: "",
-            author: ""
+            author: "",
+            id: null
           }
-        })
+        }),
+        window.location.href = '/books'
       )
     }
 
@@ -67,7 +72,7 @@ class App extends React.Component {
           }
         },
         () => {
-          fetch("http://localhost:5001/posts/" + id)
+          fetch(`http://localhost:8080/api/book/${id}`)
           .then(res => res.json())
           .then(result => {
             this.setState({
@@ -81,13 +86,16 @@ class App extends React.Component {
       );
     }
 
-    updateList = (event, id) => { 
-      fetch("http://localhost:5001/posts/" + id, {
+    updateList = async (event, id) => { 
+      const bookToUpdate = {...this.state.singledata, _id: id}
+      console.log(bookToUpdate);
+      await fetch("http://localhost:8080/api/book", {
         method: "PUT",
         headers: {
+          'Accept': 'application/json',
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(this.state.singledata)
+        body: JSON.stringify(bookToUpdate)
       })
       .then(res => res.json())
       .then(result => {
@@ -102,8 +110,12 @@ class App extends React.Component {
     }
 
     deleteList = (event, id) => { 
-      fetch("http://localhost:5001/posts/" + id, {
-        method: "DELETE"
+      fetch(`http://localhost:8080/api/book/${id}`, {
+        method: "DELETE",
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
       })
       .then(res => res.json())
       .then(result => {
@@ -131,7 +143,7 @@ class App extends React.Component {
         />
       );
       return (
-        <div className="container">
+        <div className="container mt-3">
           <span className="title-bar">
             <button type="button" className="btn btn-primary" onClick={this.getLists}>
               Get Lists

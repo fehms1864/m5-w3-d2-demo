@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Button} from "react-bootstrap";
+import { FormGroup, Input, Label } from 'reactstrap';
 
 function CreateList(props) {
     const [show, setShow] = useState(false);
@@ -10,39 +11,45 @@ function CreateList(props) {
     return (
         <React.Fragment>
             <Button variant='primary' onClick={handleShow}>
-                Create New List
+                Add Book
             </Button>
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>New List</Modal.Title>
+                    <Modal.Title>Add Book</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <input 
-                        type='text'
-                        placeholder='Title'
-                        name='title'
-                        value={props.singledata.title}
-                        onChange={props.handleChange}
-                        className='d-block my-3'
-                    />
-                    <input 
-                        type='text'
-                        placeholder='Author'
-                        name='author'
-                        value={props.singledata.author}
-                        onChange={props.handleChange}
-                        className='d-block my-3'
-                    />
+                        <FormGroup>
+                            <Label for="title" className='h5 mt-3'> Book Title</Label>
+                            <Input 
+                            type='text'
+                            name='title'
+                            id='title'
+                            value={props.singledata.title}
+                            onChange={props.handleChange}
+                            className='d-block'
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="author" className='h5 mt-3'>Author</Label>
+                            <Input 
+                            type='text'
+                            name='author'
+                            id='author'
+                            value={props.singledata.author}
+                            onChange={props.handleChange}
+                            className='d-block'
+                            />
+                        </FormGroup>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant='secondary' onClick={handleClose}>
-                        Close
+                        Cancel
                     </Button>
                     <Button variant='primary' onClick={() => {
                         handleClose();
                         props.createList();
                     }}>
-                        Create
+                        Save
                     </Button>
                 </Modal.Footer>
             </Modal>

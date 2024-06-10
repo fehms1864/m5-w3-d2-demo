@@ -1,6 +1,7 @@
 import React from 'react'
 import UpdateList from './UpdateList';
 import DeleteList from './DeleteList';
+import { ButtonGroup } from 'reactstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function Lists(props) {
@@ -8,42 +9,42 @@ function Lists(props) {
     props.alldata.forEach(element => {
         listrows.push(
             <tr key={element.id}>
-                <td>{element.id}</td>
                 <td>{element.title}</td>
                 <td>{element.author}</td>
                 <td>
+                    <ButtonGroup>
                     <UpdateList 
-                        elementId={element.id}
+                        elementId={element._id}
                         singledata={props.singledata}
                         getList={props.getList}
                         updateList={props.updateList}
                         handleChange={props.handleChange}
                     />
-                </td>
-                <td>
                     <DeleteList 
-                        elementId={element.id}
+                        elementId={element._id}
                         singledata={props.singledata}
                         getList={props.getList}
                         deleteList={props.deleteList}
                     />
+                    </ButtonGroup>
                 </td>
             </tr>
         )
     })
     return (
+        <>
+        <h3 className='my-3'>Book List</h3>
         <table className='table table-striped'>
             <thead>
                 <tr>
-                    <th>#</th>
                     <th>Title</th>
                     <th>Author</th>
-                    <th>Update</th>
-                    <th>Delete</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>{listrows}</tbody>
         </table>
+        </>
     )
 }
 
